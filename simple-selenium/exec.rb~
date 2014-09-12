@@ -1,0 +1,37 @@
+#!/opt/apps/ruby/ruby/bin/ruby
+
+# ==== Description
+# Wrapper around all dom related methods. The DOM action
+# is passed in as a callback.  This automatically retries
+# the action for 10 seconds before giving up.
+#
+# ==== Raises
+# Raises an Exception based on the DOM action taken.
+private 
+  def try_dom_action()
+    attempts = 0
+    begin
+      yield
+    rescue Exception => err
+      if attempts < @dom_retry_timeout
+        puts("WARN: An error occurred executing a DOM action attempt '#{attempts}' of '#{@dom_retry_timeout}', trying again. " + err.message)
+        attempts += 1
+        sleep 0.5
+        retry
+      else
+        puts("ERROR: An error occurred executing a DOM action. Total attempts '#{@dom_retry_timeout}'")
+        raise
+      end
+    end
+  end
+
+# Launch Firefox
+driver = Selenium::WebDriver.for(:firefox)
+driver.navigate.to('www.google.com')
+
+# Execute Click
+#try_dom_action do
+#  elem = @driver.find_element(:xpath, xpath)
+#  @driver.action.move_to(elem).perform
+#  elem.click
+#end

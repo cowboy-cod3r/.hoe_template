@@ -1,0 +1,135 @@
+#!/bin/sh
+#
+# Start and stop <%= project %>
+#
+# chkconfig: 345 91 74
+# description: Manages the <%= project %> Service
+# processname: <%= project %>
+# pidfile: /var/run/<%= project %>.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Export Ruby Path
+export PATH=/opt/apps/ruby/ruby/bin:$PATH
+
+# Variable Declaration
+prog="<%= project %>"
+pid_file="/var/run/<%= project %>"
+lock_file="/var/lock/subsys/<%= project %>"
+server_type="thin"
+env="development"
+port="8090"
+svc_cmd="<%= project %> -p $port --daemonize --server $server_type --env $env --pid $pid_file"
+
+# Verify the network is up
+[[ $NETWORKING == "no" ]] && exit 1
+
+# Verify the program exists
+which $prog >/dev/null 2>&1 
+if [[ $? != 0 ]]; then
+  echo -n "ERROR: ${prog} could not be found on the system."
+  echo
+  failure $"${msg}"
+  exit 1
+fi
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Cleans up the lock file
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+remove_lock()
+{
+  [[ -f $lock_file ]] && rm -f $lock_file
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Cleans up the pid file
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+remove_pid()
+{
+  [[ -f $pid_file ]] && rm -f $pid_file
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Starts the service
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+start()
+{
+  echo -n "Starting $prog: "
+  status -p $pid_file $prog >/dev/null 2>&1
+  PIDSTATE=$?
+  if [[ $PIDSTATE == 0 ]]; then
+    RETVAL=1
+    echo -n "${prog} is already running."
+    echo
+    failure $"${prog} is already running."
+  else
+    # Some cleanup first
+    remove_lock
+    remove_pid
+    
+    # Start the daemon
+    daemon --pidfile $pid_file $svc_cmd >/dev/null 2>&1 &
+    RETVAL=$?
+    echo
+    if [[ $RETVAL -eq 0 ]]; then
+      touch $lock_file
+      success $"$prog start"
+    fi
+    echo
+  fi
+  return $RETVAL
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Stops the service
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+stop()
+{
+  echo -n "Stopping $prog: "
+  status -p $pid_file $prog >/dev/null 2>&1
+  RETVAL=$?
+  if [[ $RETVAL -gt 0 ]]; then
+    echo -n "$prog is already stopped."
+    failure $"$prog stop (but it was already stopped)"
+  else
+    killproc -p $pid_file $prog
+    RETVAL=$?
+    if [[ $RETVAL -eq 0 ]]; then
+      remove_lock
+      success $"$prog stop"
+    else
+      failure $"$prog stop"
+    fi
+  fi
+  return $RETVAL
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Conditional
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    RETVAL=$?
+    ;;
+  status)
+    status -p ${pid_file} ${prog}
+    RETVAL=$?
+    ;;
+  *)
+  echo "Usage: $0 {start|stop|restart|status}"
+  exit 1
+esac
+
+exit $RETVAL

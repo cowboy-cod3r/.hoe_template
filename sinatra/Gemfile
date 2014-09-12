@@ -1,0 +1,16 @@
+# == DESCRIPTION
+# Installs any defined gem dependencies
+#
+# == EXECUTION
+# In the current directory, issue the following command:
+#
+#   bundle install
+
+# Sources
+source 'http://172.20.11.254:8808'
+source 'https://rubygems.org'
+
+# Gem Dependencies
+gem 'rake'
+gem 'sinatra'
+gem 'minitest'

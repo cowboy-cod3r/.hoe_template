@@ -1,0 +1,38 @@
+#!/opt/apps/ruby/ruby/bin/ruby
+
+# Set Classpath
+$:.unshift(File.join(File.dirname(__FILE__),"lib"))
+
+# Required Libraries
+require '<%= project %>'
+require 'rack'
+
+# == Description
+# This file serves as a wrapper around the 'rackup' command.
+# The reason we wrapped rackup is to give the rackup command
+# context of the <%= project %> sinatra app, so that it knows
+# where to find the config.ru file.  From the command line, 
+# the '<%= proejct %>' command takes all switches that are
+# supported by the rackup command
+class <%= project.capitlize %>Wrapper < Rack::Server; end
+
+# Might want to put a logger here
+#logger = IVV::Logger::Log.instance()
+
+# Append the location of the config.ru file to the ARGV constant
+#logger.info("Appending config.ru location '#{config_ru}'")
+root_dir  = File.expand_path(File.join(File.dirname(__FILE__),'..'))
+config_ru = "config=#{File.join(root_dir,'config.ru')}"
+
+# Specify the config_ru file
+ARGV << '-O'
+ARGV << config_ru
+
+# Uncomment this to change the port
+#logger.info("Overriding the port")
+#ARGV << '-p'
+#ARGV << '9080'
+
+# Invoke the Process
+#logger.info("Starting the <%= project %> App...")
+<%= project.capitalize %>.start()
