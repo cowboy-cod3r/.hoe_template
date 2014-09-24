@@ -11,7 +11,11 @@
   "scripts": {
     "test": "some-test-command",
     "build": "some-build-command",
-    "doc": "some-doc-command"
+    "doc": "some-doc-command",
+    "start": "./node_modules/.bin/forever start --append -o ./forever.log -e ./forever.log server.js",
+    "stop": "./node_modules/.bin/forever stop server.js",
+    "status": "./node_modules/.bin/forever list",
+    "test": "./node_modules/.bin/mocha -R spec test/*-test.js"
   },
   "author": "Sean Humbarger",
   "license": "Apache",
@@ -20,7 +24,16 @@
     "url": "git://github.com/sean.humbarger/change-me.git"
   },
   "devDependencies": {
-    "jsdoc": "3.3.0-alpha9"
+    "jsdoc": "~3.3.0-alpha9",
+    "mocha": "*",
+    "chai": "*",
+    "supertest": "*"
+  },
+  "dependencies": {
+    "restify": "~2.6",
+    "bunyan": "~0.21",
+    "yaml-config": "~0.3",
+    "forever": "~0.10"
   },
   "files": [
     "underscore.js",
