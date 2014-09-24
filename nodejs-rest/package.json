@@ -1,0 +1,30 @@
+{
+  "name": "change-me",
+  "version": "0.0.1",
+  "description": "This is an example",
+  "main": "main.js",
+  "homepage": "http://somewhere.com",
+  "keywords": [
+    "one",
+    "two"
+  ],
+  "scripts": {
+    "test": "some-test-command",
+    "build": "some-build-command",
+    "doc": "some-doc-command"
+  },
+  "author": "Sean Humbarger",
+  "license": "Apache",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sean.humbarger/change-me.git"
+  },
+  "devDependencies": {
+    "jsdoc": "3.3.0-alpha9"
+  },
+  "files": [
+    "underscore.js",
+    "underscore-min.js",
+    "LICENSE"
+  ]
+}
