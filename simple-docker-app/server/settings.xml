@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <offline>false</offline>
+  <servers>
+    <server>
+      <id>nexus</id>
+      <username>sean.humbarger@issinc.com</username>
+      <password>{rkcweaIekmwHZojq6Q8oxlP5belSiMscSWhVjWphDao=}</password>
+    </server>
+  </servers>
+  <mirrors>
+    <mirror>
+      <id>nexus</id>
+      <mirrorOf>*</mirrorOf>
+      <url>https://maven.issinc.com/nexus/content/groups/public</url>
+    </mirror>
+  </mirrors>
+  <profiles>
+
+
+    <!-- This is the WE Profile -->
+    <profile>
+      <id>dev-install</id>
+      <properties>
+
+        <project.dir>/opt/issinc</project.dir>
+        <deploy.dir>${project.dir}/cidne</deploy.dir>
+        <solr.home>${project.dir}/solr</solr.home>
+        <neo4j.home.dir>${project.dir}/we-wiki/neo4jdb</neo4j.home.dir>
+        <tomcat.home>${deploy.dir}/tomcat/tomcat</tomcat.home>
+        <mule.home>${deploy.dir}/mule-standalone-3.3.1</mule.home>
+
+        <hostname>ISS203943</hostname>
+
+        <ldap.server>172.30.12.80</ldap.server>
+        <ldap.domain>issinc.com</ldap.domain>
+        <enabled.auth.methods>userpass,pki,api</enabled.auth.methods>
+        <ldap.url>ldaps://172.30.12.80:636</ldap.url>
+        <ldap.searchBase>dc=issinc,dc=com</ldap.searchBase>
+        <ldap.userDn>cn=npe-iss-openid,ou=NPEs,ou=Native,dc=issinc,dc=com</ldap.userDn>
+        <ldap.credentials>sd2wMwzsT5YjivaBu/ujPg==</ldap.credentials>
+        <ldap.searchFilter>(sAMAccountName={0})</ldap.searchFilter>
+
+        <ssl.port>8443</ssl.port>
+        <ssl.truststore.path>c:/cep/certs/cep_trust.ks</ssl.truststore.path>
+        <ssl.truststore.password>password</ssl.truststore.password>
+        <ssl.keystore.path>c:/cep/certs/cep_keys.ks</ssl.keystore.path>
+        <ssl.keystore.password>password</ssl.keystore.password>
+
+        <postgres.url>jdbc:postgresql://localhost:5432/postgres</postgres.url>
+        <postgres.username>postgres</postgres.username>
+        <postgres.password>postgres</postgres.password>
+
+        <we.audit.user>npe-iss-audit-config</we.audit.user>
+        <we.audit.queue.primary>/com/issinc/we/queue/AuditPrimary</we.audit.queue.primary>
+        <we.audit.java.naming.provider.url>jnp://172.30.12.138:1099</we.audit.java.naming.provider.url>
+
+        <activiti.postgres.hostname>localhost</activiti.postgres.hostname>
+        <audit-manager.hostname>172.30.12.138</audit-manager.hostname>
+        <audit-manager.port>7443</audit-manager.port>
+        <audit.rabbit.hostname>172.30.12.138</audit.rabbit.hostname>
+        <capco.data-interface.hostname>172.30.12.139</capco.data-interface.hostname>
+        <data-interface.hostname>172.30.12.139</data-interface.hostname>
+        <form-service.hostname>172.30.12.140</form-service.hostname>
+        <media-service.hostname>172.30.12.140</media-service.hostname>
+        <pdp.hostname>172.30.12.138</pdp.hostname>
+        <rabbitmq.hostname>172.30.12.138</rabbitmq.hostname>
+        <rbac-service.hostname>172.30.12.138</rbac-service.hostname>
+        <reporting-service.hostname>172.30.12.140</reporting-service.hostname>
+        <resource-service.hostname>172.30.12.140</resource-service.hostname>
+        <rexster.hostname>172.30.12.138</rexster.hostname>
+        <sts-service.hostname>172.30.12.138</sts-service.hostname>
+        <solr-service.hostname>172.30.12.138</solr-service.hostname>
+        <template-service.hostname>172.30.12.140</template-service.hostname>
+        <user-management-service.hostname>172.30.12.140</user-management-service.hostname>
+        <validation-service.hostname>172.30.12.140</validation-service.hostname>
+        <workflow-service.hostname>172.30.12.140</workflow-service.hostname>
+
+      </properties>
+    </profile>
+    <!--
+    <profile>
+      <id>dev</id>
+        <properties>
+          <tomcat.dir>C:\dev\RandDTools\apache-tomcat-7.0.32</tomcat.dir>
+          <jcr.dir>C:\dev\RandDTools\jcr</jcr.dir>
+          <solr.dir>C:\dev\RandDTools\solr</solr.dir>
+      </properties>
+    </profile>
+  -->
+    <profile>
+      <id>nexus</id>
+      <properties/>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>http://central</url>
+          <releases>
+            <enabled>true</enabled>
+            <checksumPolicy>warn</checksumPolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+        <id>central</id>
+        <url>http://central</url>
+        <releases>
+          <enabled>true</enabled>
+          <checksumPolicy>warn</checksumPolicy>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+          <updatePolicy>always</updatePolicy>
+          <checksumPolicy>warn</checksumPolicy>
+        </snapshots>
+      </pluginRepository>
+    </pluginRepositories>
+  </profile>
+</profiles>
+
+  <activeProfiles>
+    <activeProfile>nexus</activeProfile>
+    <activeProfile>dev-install</activeProfile>
+  </activeProfiles>
+</settings>
